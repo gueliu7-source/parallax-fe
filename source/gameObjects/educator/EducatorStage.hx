@@ -161,7 +161,7 @@ class EducatorStage
 		camDoor.zoom = 0.5;
 		camDoor.y += 40;
 		camDoor.bgColor = 0x00000000;
-		FlxG.cameras.add(camDoor, false);
+		FlxG.cameras.add(camDoor);
 		// camDoor desenha logo acima da camGame e abaixo do HUD
 		FlxG.cameras.list.remove(camDoor);
 		FlxG.cameras.list.insert(FlxG.cameras.list.indexOf(PlayState.camGame) + 1, camDoor);
@@ -170,7 +170,7 @@ class EducatorStage
 		{
 			camBoard = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 			camBoard.bgColor = 0x00000000;
-			FlxG.cameras.add(camBoard, false);
+			FlxG.cameras.add(camBoard);
 		}
 	}
 
@@ -200,9 +200,9 @@ class EducatorStage
 		// cenario (atlas reduzido a 50%: ver tools/optimize_schoolhouse.py). scale 2 devolve o tamanho original.
 		bg = new FlxSprite(-350, -100);
 		bg.frames = Paths.getSparrowAtlas('bgs/educator/SchoolhouseA');
-		bg.animation.addByPrefix('idle', 'schoolhouse', 5.833);
-		bg.animation.addByPrefix('transition', 'transition', 5.833);
-		bg.animation.addByPrefix('dark', 'dark', 5.833);
+		bg.animation.addByPrefix('idle', 'schoolhouse', 6);
+		bg.animation.addByPrefix('transition', 'transition', 6);
+		bg.animation.addByPrefix('dark', 'dark', 6);
 		bg.animation.play('idle');
 		bg.origin.set(0, 0);
 		bg.scale.set(2, 2);
