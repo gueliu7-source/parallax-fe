@@ -217,10 +217,8 @@ class Init extends FlxState
 
 	private function gotoTitleScreen()
 	{
-		if (trueSettings.get("Custom Titlescreen"))
-			Main.switchState(this, new CustomTitlescreen());
-		else
-			Main.switchState(this, new TitleState());
+		// PARALLAX: o jogo abre no aviso do mod, depois vai para o titulo do Parallax
+		Main.switchState(this, new meta.state.parallax.ParallaxWarningState());
 	}
 
 	public static function loadSettings():Void

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="pressenterSmall.png">
+	<SubTexture name="peEnter0000" x="2005" y="0" width="368" height="68" frameX="12" frameY="-15" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0001" x="2005" y="0" width="368" height="68" frameX="12" frameY="-15" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0002" x="0" y="0" width="236" height="198" frameX="-58" frameY="50" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0003" x="0" y="0" width="236" height="198" frameX="-58" frameY="50" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0004" x="1600" y="0" width="403" height="72" frameX="25" frameY="-13" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0005" x="1600" y="0" width="403" height="72" frameX="25" frameY="-13" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0006" x="238" y="0" width="340" height="87" frameX="-6" frameY="-6" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0007" x="238" y="0" width="340" height="87" frameX="-6" frameY="-6" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0008" x="238" y="0" width="340" height="87" frameX="-6" frameY="-6" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peEnter0009" x="580" y="0" width="340" height="87" frameX="-6" frameY="-6" frameWidth="403" frameHeight="198"/>
+	<SubTexture name="peinstance0000" x="922" y="0" width="337" height="84"/>
+	<SubTexture name="peinstance0001" x="922" y="0" width="337" height="84"/>
+	<SubTexture name="peinstance0002" x="1261" y="0" width="337" height="84"/>
+	<SubTexture name="peinstance0003" x="1261" y="0" width="337" height="84"/>
+</TextureAtlas>

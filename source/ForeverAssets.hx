@@ -177,7 +177,7 @@ class ForeverAssets
 				// not even just a cleanliness thing it's just so annoying to tweak if something goes wrong like
 				// genuinely more programmers should make their code more modular
 				var framesArgument:String = "arrows-pixels";
-				newStaticArrow.loadGraphic(Paths.image(ForeverTools.returnSkinAsset('$framesArgument', assetModifier, Init.trueSettings.get("Note Skin"),
+				newStaticArrow.loadGraphic(Paths.image((PlayState.curStage == 'educator') ? 'game/notes/EDUCATOR_Notes' : ForeverTools.returnSkinAsset('$framesArgument', assetModifier, Init.trueSettings.get("Note Skin"),
 					'noteskins/notes')), true,
 					17, 17);
 				newStaticArrow.animation.add('static', [staticArrowType]);

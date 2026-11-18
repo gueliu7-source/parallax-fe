@@ -22,6 +22,7 @@ import gameObjects.Character;
 import haxe.Json;
 import meta.data.*;
 import meta.state.PlayState;
+import openfl.display.GraphicsShader;
 import openfl.display.Shader;
 import openfl.filters.BitmapFilter;
 import openfl.filters.ShaderFilter;
@@ -85,6 +86,8 @@ class EducatorStage
 
 	// estado do stage
 	var evil:Bool = false;
+	/** true depois da transicao glitch (o game over usa o quadro 'evil') **/
+	public var hudEvil:Bool = false;
 	var sideToSide:Bool = false;
 	var camZoomInterval:Int = 1;
 	var camZoomAmount:Float = 0;
@@ -124,11 +127,7 @@ class EducatorStage
 	{
 		this.ps = ps;
 		downscroll = Init.trueSettings.get('Downscroll');
-		var q:Dynamic = FlxG.save.data.eduQuality;
-		if (q != null)
-			quality = q;
-		if (FlxG.save.data.eduMath == false)
-			mathEnabled = false;
+		loadConfig();
 
 		loadEvents();
 		buildCameras();
@@ -140,6 +139,34 @@ class EducatorStage
 	}
 
 	// ------------------------------------------------------------------ montagem
+
+	/** le assets/data/parallax.json ({"math": true, "quality": 1}); pode ser editado no Bloco de Notas, sem recompilar **/
+	function loadConfig()
+	{
+		try
+		{
+			var path = 'assets/data/parallax.json';
+			if (Assets.exists(path))
+			{
+				var cfg:Dynamic = Json.parse(Assets.getText(path));
+				if (cfg.quality != null)
+					quality = Std.int(cfg.quality);
+				if (cfg.math != null)
+					mathEnabled = (cfg.math == true);
+			}
+		}
+		catch (e:Dynamic)
+		{
+			trace('EducatorStage: parallax.json invalido (' + e + ')');
+		}
+		// opcoes salvas pelo menu do jogo tem prioridade sobre o arquivo
+		var sq:Dynamic = FlxG.save.data.eduQuality;
+		if (sq != null)
+			quality = Std.int(sq);
+		var sm:Dynamic = FlxG.save.data.eduMath;
+		if (sm != null)
+			mathEnabled = (sm == true);
+	}
 
 	function loadEvents()
 	{
@@ -342,11 +369,7 @@ class EducatorStage
 
 	function loadShader(name:String):Shader
 	{
-		var src:String = Assets.getText('assets/shaders/' + name + '.frag');
-		src = src.replace('flixel_texture2D', 'texture2D');
-		var s = new Shader();
-		s.glFragmentSource = src;
-		return s;
+		return EduShaders.load(name);
 	}
 
 	function buildShaders()
@@ -363,8 +386,7 @@ class EducatorStage
 			dadGlitch = loadShader('glitch');
 			dadGlitch.data.prob.value = [0.0];
 			// "preto e branco": versao propria e simples (o BlackWhite.frag original usa macros do FlxShader)
-			bwShader = new Shader();
-			bwShader.glFragmentSource = '#pragma header\nvoid main() { vec4 c = texture2D(bitmap, openfl_TextureCoordv); float g = step(0.45, dot(c.rgb, vec3(0.299, 0.587, 0.114))); gl_FragColor = vec4(vec3(g) * c.a, c.a); }';
+			bwShader = EduShaders.fromSource('#pragma header\nvoid main() { vec4 c = texture2D(bitmap, openfl_TextureCoordv); float g = step(0.45, dot(c.rgb, vec3(0.299, 0.587, 0.114))); gl_FragColor = vec4(vec3(g) * c.a, c.a); }');
 			fCompression = new ShaderFilter(compression);
 			fSchool = new ShaderFilter(glitchShader);
 			fDad = new ShaderFilter(dadGlitch);
@@ -634,6 +656,7 @@ class EducatorStage
 
 	function glitchTransition()
 	{
+		hudEvil = true;
 		hud.animation.play('evil');
 		if (quality > 0)
 		{

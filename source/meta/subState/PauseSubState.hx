@@ -142,9 +142,9 @@ class PauseSubState extends MusicBeatSubState
 					PlayState.resetMusic();
 
 					if (PlayState.isStoryMode)
-						Main.switchState(this, new StoryMenuState());
+						Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
 					else
-						Main.switchState(this, new FreeplayState());
+						Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
 			}
 		}
 

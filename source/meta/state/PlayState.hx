@@ -575,7 +575,10 @@ class PlayState extends MusicBeatState
 
 				resetMusic();
 
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				if (educator != null)
+					openSubState(new meta.subState.EducatorGameOverSubstate(educator.hudEvil));
+				else
+					openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 				// discord stuffs should go here
 			}
@@ -1483,7 +1486,7 @@ class PlayState extends MusicBeatState
 
 		if (!isStoryMode)
 		{
-			Main.switchState(this, new FreeplayState());
+			Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
 		}
 		else
 		{
@@ -1504,7 +1507,7 @@ class PlayState extends MusicBeatState
 				transOut = FlxTransitionableState.defaultTransOut;
 
 				// change to the menu state
-				Main.switchState(this, new StoryMenuState());
+				Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
 
 				// save the week's score if the score is valid
 				if (SONG.validScore)

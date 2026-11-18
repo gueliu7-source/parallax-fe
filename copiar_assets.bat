@@ -16,5 +16,7 @@ copy /Y "%SRC%\songs\Expulsion\song\Inst.ogg" "%DST%\assets\songs\expulsion\Inst
 copy /Y "%SRC%\songs\Expulsion\song\Voices.ogg" "%DST%\assets\songs\expulsion\Voices.ogg"
 REM remove o atlas original gigante (415 MB de textura); o jogo usa SchoolhouseA/B
 del /Q "%DST%\assets\images\bgs\educator\Schoolhouse.png" "%DST%\assets\images\bgs\educator\Schoolhouse.xml"
+REM remove os atlases originais do menu (256 MB e 16 MB de textura); o jogo usa as versoes reduzidas
+del /Q "%DST%\assets\images\menus\title\Paralaxlogo.png" "%DST%\assets\images\menus\title\Paralaxlogo.xml" "%DST%\assets\images\menus\title\pressenterparralaxxx.png" "%DST%\assets\images\menus\title\pressenterparralaxxx.xml"
 xcopy "assets\songs\expulsion" "%DST%\assets\songs\expulsion" /E /I /Y
 echo Pronto.
