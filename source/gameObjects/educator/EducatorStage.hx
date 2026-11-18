@@ -124,7 +124,7 @@ class EducatorStage
 	{
 		this.ps = ps;
 		downscroll = Init.trueSettings.get('Downscroll');
-		var q = FlxG.save.data.eduQuality;
+		var q:Dynamic = FlxG.save.data.eduQuality;
 		if (q != null)
 			quality = q;
 		if (FlxG.save.data.eduMath == false)
