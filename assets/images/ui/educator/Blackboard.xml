@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="Blackboard.png">
+<SubTexture name="normal0000" x="0" y="131" width="248" height="114" frameX="-4" frameY="0" frameWidth="256" frameHeight="114" />
+<SubTexture name="evil0000" x="0" y="0" width="267" height="131" frameX="-16" frameY="-12" frameWidth="300" frameHeight="150" />
+</TextureAtlas>

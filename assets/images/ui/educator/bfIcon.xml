@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="bfIcon.png">
+<SubTexture name="default0000" x="0" y="0" width="232" height="172" frameX="0" frameY="0" frameWidth="232" frameHeight="172" />
+<SubTexture name="defeat0000" x="232" y="0" width="232" height="172" frameX="0" frameY="0" frameWidth="232" frameHeight="172" />
+</TextureAtlas>

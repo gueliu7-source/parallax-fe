@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 DEV https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="gameover-edu.png" width="519" height="868" spritePadding="3" borderPadding="1">
+	<SubTexture name="gameover0000" x="1" y="1" width="517" height="316" frameX="-10" frameY="-28" frameWidth="540" frameHeight="366"/>
+	<SubTexture name="gameover0001" x="1" y="320" width="508" height="291" frameX="-13" frameY="-52" frameWidth="540" frameHeight="366"/>
+	<SubTexture name="gameover0002" x="1" y="614" width="513" height="253" frameX="-10" frameY="-90" frameWidth="540" frameHeight="366"/>
+	<SubTexture name="gameover0004" x="1" y="320" width="508" height="291" frameX="-13" frameY="-52" frameWidth="540" frameHeight="366"/>
+</TextureAtlas>

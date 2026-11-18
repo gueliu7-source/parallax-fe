@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="theFUCKINGdoor.png">
+<SubTexture name="doorOpen0000" x="0" y="0" width="136" height="264" frameX="0" frameY="0" frameWidth="128" frameHeight="256" />
+<SubTexture name="doorOpen0001" x="272" y="0" width="136" height="264" frameX="0" frameY="0" frameWidth="128" frameHeight="256" />
+<SubTexture name="doorOpen0002" x="136" y="0" width="136" height="264" frameX="0" frameY="0" frameWidth="128" frameHeight="256" />
+<SubTexture name="doorOpen0003" x="408" y="0" width="136" height="264" frameX="0" frameY="0" frameWidth="128" frameHeight="256" />
+</TextureAtlas>
