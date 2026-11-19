@@ -13,6 +13,7 @@ import flixel.tweens.FlxTween;
 import flixel.tweens.FlxTween.FlxTweenType;
 import flixel.text.FlxText.FlxTextBorderStyle;
 import meta.state.PlayState;
+import meta.state.menus.*;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import gameObjects.educator.EduCursor;
@@ -44,7 +45,7 @@ class ParallaxTitleState extends MusicBeatState
 	var time:Float = 0;
 	var num:Float = 0;
 
-	var options:Array<String> = ['play', 'options', 'credits'];
+	var options:Array<String> = ['play', 'freeplay', 'story mode', 'options', 'credits'];
 	var curSelected:Int = 0;
 
 	var intro:Bool = true;
@@ -270,6 +271,10 @@ class ParallaxTitleState extends MusicBeatState
 						startSong();
 					}
 				});
+			case 'freeplay':
+				Main.switchState(this, new FreeplayState());
+			case 'story mode':
+				Main.switchState(this, new StoryMenuState());
 			case 'options':
 				Main.switchState(this, new ParallaxOptionsState());
 			case 'credits':
@@ -283,6 +288,7 @@ class ParallaxTitleState extends MusicBeatState
 		PlayState.isStoryMode = false;
 		PlayState.storyDifficulty = 2;
 		PlayState.storyWeek = 0;
+		ParallaxFlow.launchedFromTitle = true;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		Main.switchState(this, new PlayState());

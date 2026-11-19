@@ -217,7 +217,7 @@ class FreeplayState extends MusicBeatState
 		if (controls.BACK)
 		{
 			threadActive = false;
-			Main.switchState(this, new MainMenuState());
+			Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
 		}
 
 		if (accepted)
@@ -237,6 +237,7 @@ class FreeplayState extends MusicBeatState
 
 			threadActive = false;
 
+			meta.state.parallax.ParallaxFlow.launchedFromTitle = false;
 			Main.switchState(this, new PlayState());
 		}
 

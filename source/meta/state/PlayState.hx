@@ -244,7 +244,7 @@ class PlayState extends MusicBeatState
 		changeableSkin = Init.trueSettings.get("UI Skin");
 		if ((curStage.startsWith("school")) && ((determinedChartType == "FNF")))
 			assetModifier = 'pixel';
-		if (curStage == 'educator')
+		if (curStage == 'educator' && gameObjects.educator.EduShaders.modNotes())
 			assetModifier = 'pixel'; // PARALLAX usa notas pixel
 
 		// isPixel = true;
@@ -1486,7 +1486,7 @@ class PlayState extends MusicBeatState
 
 		if (!isStoryMode)
 		{
-			Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
+			Main.switchState(this, meta.state.parallax.ParallaxFlow.afterSong(PlayState.isStoryMode));
 		}
 		else
 		{
@@ -1507,7 +1507,7 @@ class PlayState extends MusicBeatState
 				transOut = FlxTransitionableState.defaultTransOut;
 
 				// change to the menu state
-				Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
+				Main.switchState(this, meta.state.parallax.ParallaxFlow.afterSong(PlayState.isStoryMode));
 
 				// save the week's score if the score is valid
 				if (SONG.validScore)

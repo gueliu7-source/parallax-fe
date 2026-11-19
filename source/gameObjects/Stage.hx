@@ -77,6 +77,8 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					curStage = 'school';
 				case 'thorns':
 					curStage = 'schoolEvil';
+				case 'expulsion':
+					curStage = 'educator'; // PARALLAX
 				default:
 					curStage = 'stage';
 			}

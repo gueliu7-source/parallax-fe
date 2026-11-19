@@ -101,7 +101,7 @@ class EducatorGameOverSubstate extends MusicBeatSubState
 			press = false;
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
-			Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
+			Main.switchState(this, meta.state.parallax.ParallaxFlow.afterSong(false));
 		}
 	}
 

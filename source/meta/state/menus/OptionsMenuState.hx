@@ -21,6 +21,16 @@ import meta.subState.OptionsSubstate;
 **/
 class OptionsMenuState extends MusicBeatState
 {
+	/** true quando aberto pelas opcoes do Parallax (para voltar a elas) **/
+	public static var fromParallax:Bool = false;
+
+	function backState():flixel.FlxState
+	{
+		if (fromParallax)
+			return new meta.state.parallax.ParallaxOptionsState();
+		return new meta.state.parallax.ParallaxTitleState();
+	}
+
 	private var categoryMap:Map<String, Dynamic>;
 	private var activeSubgroup:FlxTypedGroup<Alphabet>;
 	private var attachments:FlxTypedGroup<FlxBasic>;
@@ -302,7 +312,7 @@ class OptionsMenuState extends MusicBeatState
 			if (curCategory != 'main')
 				loadSubgroup('main');
 			else
-				Main.switchState(this, new MainMenuState());
+				Main.switchState(this, backState());
 		}
 	}
 
@@ -576,7 +586,7 @@ class OptionsMenuState extends MusicBeatState
 			lockedMovement = true;
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
-				Main.switchState(this, new MainMenuState());
+				Main.switchState(this, backState());
 				lockedMovement = false;
 			});
 		}

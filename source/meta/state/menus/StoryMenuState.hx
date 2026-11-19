@@ -246,7 +246,7 @@ class StoryMenuState extends MusicBeatState
 		{
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
-			Main.switchState(this, new MainMenuState());
+			Main.switchState(this, new meta.state.parallax.ParallaxTitleState());
 		}
 
 		super.update(elapsed);
@@ -283,6 +283,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
+				meta.state.parallax.ParallaxFlow.launchedFromTitle = false;
 				Main.switchState(this, new PlayState());
 			});
 		}

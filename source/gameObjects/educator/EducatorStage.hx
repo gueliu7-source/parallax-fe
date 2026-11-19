@@ -355,10 +355,8 @@ class EducatorStage
 		{
 			c.x = DAD_X;
 		}
-		chars[0].y = DAD_Y;
-		chars[3].y = DAD_Y - 13; // educatorReal tem y menor no XML original
-		chars[1].y = DAD_Y;
-		chars[2].y = DAD_Y;
+		for (c in chars)
+			c.y = DAD_Y; // o original copia x/y do primeiro personagem para os outros 3
 
 		PlayState.boyfriend.x = BF_X;
 		PlayState.boyfriend.y = BF_Y;
@@ -695,6 +693,9 @@ class EducatorStage
 
 	function endSequence()
 	{
+		if (camBoard != null)
+			camBoard.setFilters([]);
+		boardFilterOn = false;
 		FlxG.camera.shake(0.009, 2.75);
 		if (quality > 0)
 		{

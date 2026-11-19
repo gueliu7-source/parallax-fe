@@ -31,6 +31,13 @@ class EduShaders
 		return (q != null) ? Std.int(q) : EducatorStage.quality;
 	}
 
+	/** true = notas do mod (pixel EDUCATOR_Notes); false = skin normal da Forever **/
+	public static function modNotes():Bool
+	{
+		var n:Dynamic = FlxG.save.data.eduNotes;
+		return n != false;
+	}
+
 	public static function cursorEnabled():Bool
 	{
 		var c:Dynamic = FlxG.save.data.eduCursor;
