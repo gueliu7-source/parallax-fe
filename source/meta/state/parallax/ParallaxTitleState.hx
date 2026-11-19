@@ -164,7 +164,7 @@ class ParallaxTitleState extends MusicBeatState
 			menuTxt.visible = false;
 			bgItems.visible = true;
 			for (i in 0...options.length)
-				menuItems.members[i].y = menuY(i);
+				(cast menuItems.members[i] : FlxSprite).y = menuY(i);
 		}
 		introDone = true;
 	}
