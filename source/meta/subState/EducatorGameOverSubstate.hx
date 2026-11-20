@@ -36,7 +36,7 @@ class EducatorGameOverSubstate extends MusicBeatSubState
 		FlxG.cameras.add(cam);
 
 		hud = new FlxSprite(0, 0);
-		hud.frames = Paths.getSparrowAtlas('ui/educator/educator-gui-trans');
+		hud.frames = Paths.getSparrowAtlas('uiEducator/educator-gui-trans');
 		hud.animation.addByPrefix('normal', 'educator GUI1', 1, false);
 		hud.animation.addByPrefix('evil', 'educator GUI7', 1, false);
 		hud.animation.play(evilHud ? 'evil' : 'normal');
@@ -46,7 +46,7 @@ class EducatorGameOverSubstate extends MusicBeatSubState
 		add(hud);
 
 		iconBF = new FlxSprite(785, 786);
-		iconBF.frames = Paths.getSparrowAtlas('ui/educator/bfIcon');
+		iconBF.frames = Paths.getSparrowAtlas('uiEducator/bfIcon');
 		iconBF.animation.addByPrefix('idle', 'default', 1, false);
 		iconBF.animation.addByPrefix('defeat', 'defeat', 1, false);
 		iconBF.animation.play('defeat');

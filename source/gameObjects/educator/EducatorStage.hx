@@ -35,9 +35,16 @@ class EducatorStage
 	// ---- ajustes ----
 	// (podem ser trocadas em assets/data/parallax.json: "dad": [x, y], "bf": [x, y], "camera": [x, y])
 	public static var DAD_X:Float = 150;
-	public static var DAD_Y:Float = 210;
+	public static var DAD_Y:Float = 230;
 	public static var BF_X:Float = 770;
 	public static var BF_Y:Float = 400;
+	/** escala da camera do jogo dentro da janela da moldura (medida comparando com o mod original) **/
+	public static inline var ZF:Float = 0.75;
+	// janela transparente da moldura do HUD, em unidades de jogo 1280x960 (640x480 do atlas x2, y + 120)
+	static inline var WIN_X:Int = 238;
+	static inline var WIN_Y:Int = 318;
+	static inline var WIN_W:Int = 804;
+	static inline var WIN_H:Int = 562;
 	static var CAM_X:Float = 270;
 	static var CAM_Y:Float = 325;
 
@@ -73,6 +80,8 @@ class EducatorStage
 	var hud:FlxSprite;
 	var blackboard:FlxSprite;
 	var mathTxt:FlxText;
+	var hudTxt:FlxText;
+	var healthTxt:FlxText;
 	var iconBF:FlxSprite;
 	var xMarks:Array<FlxSprite> = [];
 	var fadeIn:FlxSprite;
@@ -204,9 +213,13 @@ class EducatorStage
 
 	function buildCameras()
 	{
-		camDoor = new FlxCamera(0, 0, FlxG.width, FlxG.height);
-		camDoor.zoom = 0.5;
-		camDoor.y += 40;
+		// no original o jogo aparece SO dentro da janela da moldura: a camera do jogo ocupa so essa janela (e renderiza menos pixels)
+		PlayState.camGame.x = WIN_X;
+		PlayState.camGame.y = WIN_Y;
+		PlayState.camGame.width = WIN_W;
+		PlayState.camGame.height = WIN_H;
+		camDoor = new FlxCamera(WIN_X, WIN_Y + 40, WIN_W, WIN_H);
+		camDoor.zoom = 0.5 * ZF;
 		camDoor.bgColor = 0x00000000;
 		FlxG.cameras.add(camDoor);
 		// camDoor desenha logo acima da camGame e abaixo do HUD (a ordem de exibicao e a dos flashSprite, nao a de FlxG.cameras.list)
@@ -325,7 +338,7 @@ class EducatorStage
 	function buildHud()
 	{
 		hud = new FlxSprite(0, 0);
-		hud.frames = Paths.getSparrowAtlas('ui/educator/educator-gui-trans');
+		hud.frames = Paths.getSparrowAtlas('uiEducator/educator-gui-trans');
 		hud.animation.addByPrefix('normal', 'educator GUI1', 1, false);
 		hud.animation.addByPrefix('evil', 'educator GUI', 10, false);
 		hud.animation.play('normal');
@@ -338,7 +351,7 @@ class EducatorStage
 
 		for (i in 0...3)
 		{
-			var x = new FlxSprite(1040).loadGraphic(Paths.image('ui/educator/X'));
+			var x = new FlxSprite(1040).loadGraphic(Paths.image('uiEducator/X'));
 			x.cameras = [camFrame];
 			x.scale.set(1.1, 1.1);
 			x.y = downscroll ? 40 : 850;
@@ -349,7 +362,7 @@ class EducatorStage
 		}
 
 		blackboard = new FlxSprite(0, 0);
-		blackboard.frames = Paths.getSparrowAtlas('ui/educator/Blackboard');
+		blackboard.frames = Paths.getSparrowAtlas('uiEducator/Blackboard');
 		blackboard.animation.addByPrefix('normal', 'normal', 1, false);
 		blackboard.animation.addByPrefix('evil', 'evil', 1, false);
 		blackboard.animation.play('normal');
@@ -360,7 +373,7 @@ class EducatorStage
 		ps.insert(0, blackboard);
 
 		iconBF = new FlxSprite(785, 786);
-		iconBF.frames = Paths.getSparrowAtlas('ui/educator/bfIcon');
+		iconBF.frames = Paths.getSparrowAtlas('uiEducator/bfIcon');
 		iconBF.animation.addByPrefix('idle', 'default', 1, false);
 		iconBF.animation.addByPrefix('defeat', 'defeat', 1, false);
 		iconBF.animation.play('idle');
@@ -375,6 +388,17 @@ class EducatorStage
 		mathTxt.alpha = 0;
 		mathTxt.cameras = [camBoard != null ? camBoard : camFrame];
 		ps.insert(1, mathTxt);
+
+		// textos do HUD do mod (songs/Expulsion/scripts/UI.hx): placar embaixo e vida no canto
+		hudTxt = new FlxText(0, downscroll ? 70 : 900, FlxG.width, 'Accuracy:-%- (N/A) | Misses: 0 | Score: 0', 16);
+		hudTxt.setFormat(Paths.font('schoolhouse.TTF'), 30, FlxColor.WHITE, CENTER);
+		hudTxt.cameras = [camFrame];
+		ps.add(hudTxt);
+
+		healthTxt = new FlxText(70, downscroll ? 30 : 890, FlxG.width, 'Health: 100%', 16);
+		healthTxt.setFormat(Paths.font('schoolhouse.TTF'), 33, FlxColor.WHITE, LEFT);
+		healthTxt.cameras = [camFrame];
+		ps.add(healthTxt);
 	}
 
 	function buildCharacters()
@@ -451,6 +475,7 @@ class EducatorStage
 		h.healthBarBG.visible = false;
 		h.iconP1.visible = false;
 		h.iconP2.visible = false;
+		h.scoreBar.visible = false;
 		// strums so aparecem no beat 28
 		for (sl in PlayState.strumLines)
 			for (r in sl.receptors)
@@ -622,6 +647,10 @@ class EducatorStage
 		}
 
 		iconBF.animation.play(PlayState.health < 0.5 ? 'defeat' : 'idle');
+		healthTxt.text = 'Health: ' + Math.floor(PlayState.health * 50) + '%';
+		if (PlayState.misses > 0 || PlayState.songScore > 0)
+			hudTxt.text = 'Accuracy: ' + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '% - ' + Timings.returnScoreRating().toUpperCase()
+				+ ' |  Misses: ' + PlayState.misses + ' | Score: ' + PlayState.songScore;
 
 		if (mathTime)
 			updateMathInput();
@@ -679,7 +708,7 @@ class EducatorStage
 				var secs = Std.parseFloat(Std.string(p[2])) * Conductor.stepCrochet / 1000;
 				FlxG.camera.flash(FlxColor.fromInt(Std.int(p[1])), secs);
 			case 'Add Camera Zoom':
-				FlxG.camera.zoom += Std.parseFloat(Std.string(p[0]));
+				FlxG.camera.zoom += Std.parseFloat(Std.string(p[0])) * ZF;
 			default: // 'Camera Movement': a camera e fixa neste stage
 		}
 	}
@@ -699,7 +728,7 @@ class EducatorStage
 			case 'bgTransition':
 				bgTransition();
 			case 'veryCoolSuperTransition':
-				FlxTween.tween(FlxG.camera, {zoom: 1.2}, 4.1, {
+				FlxTween.tween(FlxG.camera, {zoom: 1.2 * ZF}, 4.1, {
 					ease: FlxEase.cubeIn,
 					onComplete: function(_)
 					{
@@ -717,7 +746,7 @@ class EducatorStage
 	function midCutscene()
 	{
 		FlxTween.tween(fadeIn, {alpha: 1}, 2, {ease: FlxEase.cubeIn});
-		FlxTween.tween(camDoor, {zoom: 1.4}, 2, {
+		FlxTween.tween(camDoor, {zoom: 1.4 * ZF}, 2, {
 			ease: FlxEase.cubeIn,
 			onComplete: function(_)
 			{
@@ -732,7 +761,7 @@ class EducatorStage
 	function bgTransition()
 	{
 		bg.animation.play('transition');
-		FlxTween.tween(FlxG.camera, {zoom: 1.2}, 2, {
+		FlxTween.tween(FlxG.camera, {zoom: 1.2 * ZF}, 2, {
 			ease: FlxEase.cubeIn,
 			onComplete: function(_)
 			{
@@ -811,7 +840,7 @@ class EducatorStage
 		{
 			compAmount = v;
 		});
-		FlxTween.tween(FlxG.camera, {zoom: 0.85}, 2.75, {ease: FlxEase.quadInOut});
+		FlxTween.tween(FlxG.camera, {zoom: 0.85 * ZF}, 2.75, {ease: FlxEase.quadInOut});
 	}
 
 	// ------------------------------------------------------------------ steps / beats
@@ -845,18 +874,25 @@ class EducatorStage
 		PlayState.strumLines.members[0].character = chars[i];
 	}
 
+	/** define o zoom "do script" (defaultCamZoom) e aplica a escala da janela na camera **/
+	function setZoom(v:Float)
+	{
+		PlayState.defaultCamZoom = v;
+		FlxG.camera.zoom = v * ZF;
+	}
+
 	function zoomTween(from:Float, to:Float, dur:Float)
 	{
 		FlxTween.num(from, to, dur, {ease: FlxEase.quadInOut}, function(v:Float)
 		{
-			FlxG.camera.zoom = PlayState.defaultCamZoom = v;
+			setZoom(v);
 		});
 	}
 
 	public function beatHit(curBeat:Int)
 	{
-		if (!Init.trueSettings.get('Reduced Movements') && FlxG.camera.zoom < 1.35 && curBeat % camZoomInterval == 0)
-			FlxG.camera.zoom += 0.015 * camZoomAmount;
+		if (!Init.trueSettings.get('Reduced Movements') && FlxG.camera.zoom < 1.35 * ZF && curBeat % camZoomInterval == 0)
+			FlxG.camera.zoom += 0.015 * camZoomAmount * ZF;
 
 		var z = function(v:Float) PlayState.defaultCamZoom = v;
 		var flash = function(c:Int, s:Float) FlxG.camera.flash(c, s);
@@ -890,12 +926,12 @@ class EducatorStage
 			case 288:
 				z(1.0);
 			case 382:
-				FlxG.camera.zoom = PlayState.defaultCamZoom = 1.1;
+				setZoom(1.1);
 			case 383:
-				FlxG.camera.zoom = PlayState.defaultCamZoom = 1.3;
+				setZoom(1.3);
 			case 384:
 				flash(0xffffff, 1);
-				FlxG.camera.zoom = PlayState.defaultCamZoom = 1.0;
+				setZoom(1.0);
 				camZoomAmount = 2;
 			case 464:
 				camZoomAmount = 0;
@@ -905,7 +941,7 @@ class EducatorStage
 				flash(0xda0b0b, 0.65);
 				zoomTween(1.0, 0.8, 0.45);
 			case 623:
-				FlxTween.tween(FlxG.camera, {zoom: 1.0}, 0.45, {ease: FlxEase.quadInOut, onComplete: function(_) z(0.8)});
+				FlxTween.tween(FlxG.camera, {zoom: 1.0 * ZF}, 0.45, {ease: FlxEase.quadInOut, onComplete: function(_) z(0.8)});
 			case 624:
 				if (quality >= 2)
 				{
@@ -916,11 +952,11 @@ class EducatorStage
 			case 686:
 				camZoomAmount = 0;
 			case 687:
-				FlxTween.tween(FlxG.camera, {zoom: 1.0}, 0.45, {ease: FlxEase.quadInOut, onComplete: function(_) z(1.0)});
+				FlxTween.tween(FlxG.camera, {zoom: 1.0 * ZF}, 0.45, {ease: FlxEase.quadInOut, onComplete: function(_) z(1.0)});
 			case 688:
 				FlxG.camera.shake(0.009, 0.2);
 				sideToSide = true;
-				FlxG.camera.zoom = PlayState.defaultCamZoom = 1.0;
+				setZoom(1.0);
 			case 690:
 				glitchBurst(0.64, 0);
 			case 698 | 702 | 769 | 777:

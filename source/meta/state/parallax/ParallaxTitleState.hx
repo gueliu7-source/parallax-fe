@@ -133,7 +133,7 @@ class ParallaxTitleState extends MusicBeatState
 		add(menuItems);
 		for (i in 0...options.length)
 		{
-			var t = new FlxText(0, 900, 0, options[i], 50);
+			var t = new FlxText(0, FlxG.height + 200, 0, options[i], 50); // fora da tela (o original usava 900, que cabia em 720)
 			t.setFormat(Paths.font('vcr.ttf'), 50, FlxColor.WHITE);
 			t.borderStyle = FlxTextBorderStyle.OUTLINE_FAST;
 			t.borderSize = 2;
@@ -199,11 +199,12 @@ class ParallaxTitleState extends MusicBeatState
 			beatBounce = false;
 			FlxG.sound.play(Paths.sound('select'), 1);
 			FlxFlicker.flicker(menuTxt, 0.85, 0.07, false);
-			FlxTween.tween(logo, {y: logo.y + 800}, 1.5, {
+			FlxTween.tween(logo, {y: logo.y + 1500}, 1.5, {
 				ease: FlxEase.backInOut,
 				startDelay: 0.5,
 				onComplete: function(_)
 				{
+					logo.visible = false;
 					showMenu();
 				}
 			});

@@ -27,7 +27,7 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 {
 	// set up variables and stuff here
 	var infoBar:FlxText; // small side bar like kade engine that tells you engine info
-	var scoreBar:FlxText;
+	public var scoreBar:FlxText;
 
 	var scoreLast:Float = -1;
 	var scoreDisplay:String;
@@ -89,12 +89,14 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		engineBar.updateHitbox();
 		engineBar.x = FlxG.width - engineBar.width - 5;
 		engineBar.scrollFactor.set();
-		add(engineBar);
+		if (PlayState.curStage != 'educator')
+			add(engineBar);
 
 		infoBar = new FlxText(5, FlxG.height - 30, 0, infoDisplay, 20);
 		infoBar.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		infoBar.scrollFactor.set();
-		add(infoBar);
+		if (PlayState.curStage != 'educator')
+			add(infoBar);
 	}
 
 	override public function update(elapsed:Float)

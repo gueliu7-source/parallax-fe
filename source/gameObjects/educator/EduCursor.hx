@@ -11,7 +11,7 @@ class EduCursor extends FlxSprite
 	public function new()
 	{
 		super();
-		frames = Paths.getSparrowAtlas('ui/educator/cursor');
+		frames = Paths.getSparrowAtlas('uiEducator/cursor');
 		animation.addByPrefix('idle', 'idle', 1, false);
 		animation.addByPrefix('select', 'select', 1, false);
 		animation.play('idle');

@@ -188,9 +188,13 @@ class ForeverAssets
 				newStaticArrow.updateHitbox();
 				newStaticArrow.antialiasing = false;
 
-				newStaticArrow.addOffset('static', -67, -50);
-				newStaticArrow.addOffset('pressed', -67, -50);
-				newStaticArrow.addOffset('confirm', -67, -50);
+				// PARALLAX: as notas do mod ficam em receptor.x + 25 (PlayState), entao a strum e desenhada ali, sem o offset do pixel vanilla
+				var eduNotes:Bool = (PlayState.curStage == 'educator' && gameObjects.educator.EduShaders.modNotes());
+				var offX:Int = eduNotes ? -25 : -67;
+				var offY:Int = eduNotes ? 0 : -50;
+				newStaticArrow.addOffset('static', offX, offY);
+				newStaticArrow.addOffset('pressed', offX, offY);
+				newStaticArrow.addOffset('confirm', offX, offY);
 
 			case 'chart editor':
 				newStaticArrow.loadGraphic(Paths.image('UI/forever/base/chart editor/note_array'), true, 157, 156);

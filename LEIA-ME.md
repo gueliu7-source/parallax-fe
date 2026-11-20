@@ -49,3 +49,9 @@ Veja `docs/EVENTOS-PARALLAX.md` (todos os eventos do chart, os efeitos por beat 
 ## Diagnostico e ajuste de posicoes
 - Ao abrir *Expulsion*, o jogo grava `parallax-debug.txt` na pasta do .exe (cameras, posicao/visibilidade do BF, oponente, HUD...). Se algo aparecer errado, envie o conteudo desse arquivo.
 - `assets/data/parallax.json` aceita `"bf": [x, y]`, `"dad": [x, y]` e `"camera": [x, y]` para ajustar posicoes sem recompilar.
+
+## Atualizacao da fase 6 (correcoes comparadas com o mod original)
+- Pasta de UI renomeada: `assets/images/ui/educator` -> `assets/images/uiEducator` (no Windows `ui` e `UI` sao a mesma pasta e o jogo nao achava a moldura, o quadro-negro e os icones). No repositorio, rode `git mv assets/images/ui/educator assets/images/uiEducator` ANTES de copiar este zip.
+- A camera do jogo agora ocupa so a janela da moldura (escala 0.75, medida nos videos do original).
+- Strums no alto (y=50), alinhadas com as notas; textos "Health" e "Accuracy | Misses | Score" do mod com a fonte schoolhouse.
+- Titulo: itens do menu e logo nao aparecem mais na tela errada.
