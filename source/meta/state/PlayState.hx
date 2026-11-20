@@ -313,9 +313,11 @@ class PlayState extends MusicBeatState
 
 		//
 		var placement = (FlxG.width / 2);
+		// PARALLAX: no mod original so as strums do BF aparecem, centralizadas (strumline do oponente invisivel)
+		var centeredNotes:Bool = Init.trueSettings.get('Centered Notefield') || curStage == 'educator';
 		dadStrums = new Strumline(placement - (FlxG.width / 4), this, dadOpponent, false, true, false, 4, Init.trueSettings.get('Downscroll'));
-		dadStrums.visible = !Init.trueSettings.get('Centered Notefield');
-		boyfriendStrums = new Strumline(placement + (!Init.trueSettings.get('Centered Notefield') ? (FlxG.width / 4) : 0), this, boyfriend, true, false, true,
+		dadStrums.visible = !centeredNotes;
+		boyfriendStrums = new Strumline(placement + (!centeredNotes ? (FlxG.width / 4) : 0), this, boyfriend, true, false, true,
 			4, Init.trueSettings.get('Downscroll'));
 
 		strumLines.add(dadStrums);
@@ -1119,6 +1121,8 @@ class PlayState extends MusicBeatState
 
 	function popUpCombo(?preload:Bool = false)
 	{
+		if (curStage == 'educator')
+			return; // PARALLAX: sem popups de combo (o script original remove o comboGroup)
 		var comboString:String = Std.string(combo);
 		var negative = false;
 		if ((comboString.startsWith('-')) || (combo == 0))
@@ -1220,6 +1224,8 @@ class PlayState extends MusicBeatState
 
 	public function displayRating(daRating:String, timing:String, ?cache:Bool = false)
 	{
+		if (curStage == 'educator')
+			return; // PARALLAX: sem popups de julgamento
 		/* so you might be asking
 			"oh but if the rating isn't sick why not just reset it"
 			because miss judgements can pop, and they dont mess with your sick combo

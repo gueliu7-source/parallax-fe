@@ -1,4 +1,4 @@
-# Parallax -> Forever Engine (port completo, fase 5)
+# Parallax -> Forever Engine (port completo, fase 6)
 
 ## Conteudo deste zip
 - `source/` e `Project.xml`: arquivos da Forever **ja modificados** (copie por cima da pasta `Forever-Engine-master`, mantendo os caminhos).
@@ -31,14 +31,21 @@ Edite `assets/data/parallax.json` (Bloco de Notas, dentro da pasta do jogo): `"q
 ## Atualizar o repositorio no GitHub (Codespace)
 1. Suba este zip para o Codespace (arraste para a lista de arquivos).
 2. No terminal: `git pull`, depois
-   `unzip -q -o parallax-forever-fase5.zip && cp -r parallax-forever/. . && rm -rf parallax-forever parallax-forever-fase5.zip`
-3. `git add -A && git commit -m "fase 5" && git push` (o build roda sozinho na aba Actions).
+   `unzip -q -o parallax-forever-fase6.zip && cp -r parallax-forever/. . && rm -rf parallax-forever parallax-forever-fase6.zip`
+3. `git add -A && git commit -m "fase 6" && git push` (o build roda sozinho na aba Actions).
 
 
 Se voce ja tinha subido a fase anterior, apague os atlases antigos do menu antes do push:
 `rm -f assets/images/menus/title/Paralaxlogo.* assets/images/menus/title/pressenterparralaxxx.*`
 
-## Menus (fase 5)
+## Eventos
+Veja `docs/EVENTOS-PARALLAX.md` (todos os eventos do chart, os efeitos por beat e os steps, com o que cada um faz).
+
+## Menus (fase 6)
 - Titulo: play (Expulsion direto), freeplay, story mode (menus da Forever com as musicas originais), options, credits.
 - Options: Math Mechanics, Notes (MOD pixel / DEFAULT), Schoolhouse Cursor, Effects, e "Game Settings" que abre as opcoes completas da engine (Preferences, Controls, Note Skin, Downscroll...). Todas voltam para o titulo/opcoes do Parallax.
 - Corrigido: o Stage.hx da Forever escolhia o cenario pelo NOME da musica e ignorava o stage do chart; agora 'expulsion' -> stage 'educator'.
+
+## Diagnostico e ajuste de posicoes
+- Ao abrir *Expulsion*, o jogo grava `parallax-debug.txt` na pasta do .exe (cameras, posicao/visibilidade do BF, oponente, HUD...). Se algo aparecer errado, envie o conteudo desse arquivo.
+- `assets/data/parallax.json` aceita `"bf": [x, y]`, `"dad": [x, y]` e `"camera": [x, y]` para ajustar posicoes sem recompilar.

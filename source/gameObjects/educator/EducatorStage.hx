@@ -33,12 +33,13 @@ using StringTools;
 class EducatorStage
 {
 	// ---- ajustes ----
-	public static inline var DAD_X:Float = 150;
-	public static inline var DAD_Y:Float = 210;
-	public static inline var BF_X:Float = 770;
-	public static inline var BF_Y:Float = 400;
-	static inline var CAM_X:Float = 270;
-	static inline var CAM_Y:Float = 325;
+	// (podem ser trocadas em assets/data/parallax.json: "dad": [x, y], "bf": [x, y], "camera": [x, y])
+	public static var DAD_X:Float = 150;
+	public static var DAD_Y:Float = 210;
+	public static var BF_X:Float = 770;
+	public static var BF_Y:Float = 400;
+	static var CAM_X:Float = 270;
+	static var CAM_Y:Float = 325;
 
 	/** 0 = sem shaders | 1 = so rajadas curtas (padrao, mais leve) | 2 = completo (glitch permanente + quadro-negro) **/
 	public static var quality:Int = 1;
@@ -61,6 +62,7 @@ class EducatorStage
 	// cameras
 	var camDoor:FlxCamera;
 	var camBoard:FlxCamera;
+	var camFrame:FlxCamera; // moldura/HUD do mod: acima da camGame, abaixo do HUD da engine e das strums
 
 	// sprites
 	var bg:FlxSprite; // schoolhouse / transition / dark
@@ -95,6 +97,8 @@ class EducatorStage
 
 	// minigame
 	var mathEnabled:Bool = true;
+	var dumped2:Bool = false;
+	var dumpText:String = '';
 	var mathTime:Bool = false;
 	var question:Array<Dynamic> = null;
 	var answer:String = '_';
@@ -136,6 +140,7 @@ class EducatorStage
 		buildCharacters();
 		buildShaders();
 		hideUi();
+		dump('create');
 	}
 
 	// ------------------------------------------------------------------ montagem
@@ -153,6 +158,21 @@ class EducatorStage
 					quality = Std.int(cfg.quality);
 				if (cfg.math != null)
 					mathEnabled = (cfg.math == true);
+				if (cfg.dad != null)
+				{
+					DAD_X = cfg.dad[0];
+					DAD_Y = cfg.dad[1];
+				}
+				if (cfg.bf != null)
+				{
+					BF_X = cfg.bf[0];
+					BF_Y = cfg.bf[1];
+				}
+				if (cfg.camera != null)
+				{
+					CAM_X = cfg.camera[0];
+					CAM_Y = cfg.camera[1];
+				}
 			}
 		}
 		catch (e:Dynamic)
@@ -189,9 +209,27 @@ class EducatorStage
 		camDoor.y += 40;
 		camDoor.bgColor = 0x00000000;
 		FlxG.cameras.add(camDoor);
-		// camDoor desenha logo acima da camGame e abaixo do HUD
-		FlxG.cameras.list.remove(camDoor);
-		FlxG.cameras.list.insert(FlxG.cameras.list.indexOf(PlayState.camGame) + 1, camDoor);
+		// camDoor desenha logo acima da camGame e abaixo do HUD (a ordem de exibicao e a dos flashSprite, nao a de FlxG.cameras.list)
+		try
+		{
+			FlxG.game.setChildIndex(camDoor.flashSprite, FlxG.game.getChildIndex(PlayState.camGame.flashSprite) + 1);
+		}
+		catch (e:Dynamic)
+		{
+			trace('EducatorStage: nao consegui ordenar camDoor (' + e + ')');
+		}
+
+		camFrame = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		camFrame.bgColor = 0x00000000;
+		FlxG.cameras.add(camFrame);
+		try
+		{
+			FlxG.game.setChildIndex(camFrame.flashSprite, FlxG.game.getChildIndex(PlayState.camGame.flashSprite) + 2);
+		}
+		catch (e:Dynamic)
+		{
+			trace('EducatorStage: nao consegui ordenar camFrame (' + e + ')');
+		}
 
 		if (quality >= 2)
 		{
@@ -294,14 +332,14 @@ class EducatorStage
 		hud.antialiasing = false;
 		hud.screenCenter();
 		hud.setGraphicSize(1280, 960);
-		hud.cameras = [PlayState.camHUD];
+		hud.cameras = [camFrame];
 		hud.y += 120;
 		ps.insert(0, hud);
 
 		for (i in 0...3)
 		{
 			var x = new FlxSprite(1040).loadGraphic(Paths.image('ui/educator/X'));
-			x.cameras = [PlayState.camHUD];
+			x.cameras = [camFrame];
 			x.scale.set(1.1, 1.1);
 			x.y = downscroll ? 40 : 850;
 			x.x = 1040 + 75 * i;
@@ -317,7 +355,7 @@ class EducatorStage
 		blackboard.animation.play('normal');
 		blackboard.screenCenter();
 		blackboard.y += downscroll ? 730 : -500;
-		blackboard.cameras = [camBoard != null ? camBoard : PlayState.camHUD];
+		blackboard.cameras = [camBoard != null ? camBoard : camFrame];
 		blackboard.scale.set(2, 2);
 		ps.insert(0, blackboard);
 
@@ -329,13 +367,13 @@ class EducatorStage
 		iconBF.antialiasing = false;
 		if (downscroll)
 			iconBF.y = 0;
-		iconBF.cameras = [PlayState.camHUD];
+		iconBF.cameras = [camFrame];
 		ps.insert(2, iconBF);
 
 		mathTxt = new FlxText(0, 450, FlxG.width, '', 25);
 		mathTxt.setFormat(Paths.font('schoolhouse.TTF'), 42, FlxColor.WHITE, CENTER);
 		mathTxt.alpha = 0;
-		mathTxt.cameras = [camBoard != null ? camBoard : PlayState.camHUD];
+		mathTxt.cameras = [camBoard != null ? camBoard : camFrame];
 		ps.insert(1, mathTxt);
 	}
 
@@ -358,8 +396,10 @@ class EducatorStage
 		for (c in chars)
 			c.y = DAD_Y; // o original copia x/y do primeiro personagem para os outros 3
 
+		// nesta musica o BF nao aparece (no original: boyfriend.y += 300, fora da tela)
 		PlayState.boyfriend.x = BF_X;
 		PlayState.boyfriend.y = BF_Y;
+		PlayState.boyfriend.visible = false;
 
 		var tl = quality >= 2 ? 6 : 3;
 		trail = new FlxTrail(chars[3], null, tl, 24, 0.35, 0.069);
@@ -415,6 +455,59 @@ class EducatorStage
 		for (sl in PlayState.strumLines)
 			for (r in sl.receptors)
 				r.visible = false;
+	}
+
+	// ------------------------------------------------------------------ diagnostico
+
+	function camInfo(c:FlxCamera):String
+	{
+		var idx = -1;
+		try
+		{
+			idx = FlxG.game.getChildIndex(c.flashSprite);
+		}
+		catch (e:Dynamic) {}
+		return 'ID=' + c.ID + ' ordem=' + idx + ' visible=' + c.visible + ' alpha=' + c.alpha + ' zoom=' + c.zoom + ' scroll=(' + Std.int(c.scroll.x) + ','
+			+ Std.int(c.scroll.y) + ') bg=0x' + StringTools.hex(c.bgColor, 8);
+	}
+
+	function objInfo(name:String, o:flixel.FlxSprite):String
+	{
+		if (o == null)
+			return name + ': NULL\n';
+		var cams = [];
+		if (o.cameras != null)
+			for (c in o.cameras)
+				cams.push('cam' + c.ID);
+		return name + ': pos=(' + Std.int(o.x) + ',' + Std.int(o.y) + ') tam=(' + Std.int(o.width) + 'x' + Std.int(o.height) + ') visible=' + o.visible + ' alpha='
+			+ o.alpha + ' exists=' + o.exists + ' scale=' + o.scale.x + ' cameras=' + cams + ' indice=' + ps.members.indexOf(o) + '\n';
+	}
+
+	/** grava parallax-debug.txt ao lado do .exe (mande o conteudo se algo aparecer errado) **/
+	function dump(quando:String)
+	{
+		try
+		{
+			var t = '=== ' + quando + ' | songPosition=' + Std.int(Conductor.songPosition) + ' | qualidade=' + quality + ' ===\n';
+			t += 'FlxG: ' + FlxG.width + 'x' + FlxG.height + ' | membros do PlayState=' + ps.members.length + '\n';
+			for (c in FlxG.cameras.list)
+				t += 'camera ' + camInfo(c) + (c == PlayState.camGame ? ' [camGame]' : (c == PlayState.camHUD ? ' [camHUD]' : (c == camDoor ? ' [camDoor]' : (c == camFrame ? ' [camFrame]' : '')))) + '\n';
+			t += objInfo('bf', PlayState.boyfriend) + objInfo('gf', PlayState.gf);
+			for (i in 0...chars.length)
+				t += objInfo('oponente' + i, chars[i]);
+			t += objInfo('bg', bg) + objInfo('bgMeat', bgMeat) + objInfo('hud', hud) + objInfo('iconBF', iconBF) + objInfo('blackboard', blackboard);
+			t += objInfo('fadeGame', fadeGame) + objInfo('fadeIn', fadeIn);
+			t += 'strumlines: ' + PlayState.strumLines.length + ' (dad visible=' + PlayState.strumLines.members[0].visible + ', bf visible='
+				+ PlayState.strumLines.members[1].visible + ')\n';
+			dumpText += t + '\n';
+			#if sys
+			sys.io.File.saveContent('parallax-debug.txt', dumpText);
+			#end
+		}
+		catch (e:Dynamic)
+		{
+			trace('EducatorStage: dump falhou (' + e + ')');
+		}
 	}
 
 	// ------------------------------------------------------------------ filtros de camera
@@ -482,6 +575,12 @@ class EducatorStage
 	public function update(elapsed:Float)
 	{
 		time += elapsed;
+
+		if (!dumped2 && Conductor.songPosition > 14000)
+		{
+			dumped2 = true;
+			dump('14s de musica');
+		}
 
 		// eventos do chart
 		while (evIndex < events.length && Conductor.songPosition >= events[evIndex].time)
