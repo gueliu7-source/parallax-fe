@@ -75,7 +75,9 @@ class ClassHUD extends FlxTypedGroup<FlxBasic>
 		add(iconP2);
 
 		scoreBar = new FlxText(FlxG.width / 2, healthBarBG.y + 40, 0, scoreDisplay, 20);
-		scoreBar.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		// PARALLAX: placar da Forever, mas com a fonte do mod neste stage
+		var eduHud:Bool = (PlayState.curStage == 'educator');
+		scoreBar.setFormat(Paths.font(eduHud ? "schoolhouse.TTF" : "vcr.ttf"), eduHud ? 28 : 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		updateScoreText();
 		scoreBar.scrollFactor.set();
 		add(scoreBar);

@@ -75,7 +75,6 @@ class EducatorStage
 	var hud:FlxSprite;
 	var blackboard:FlxSprite;
 	var mathTxt:FlxText;
-	var hudTxt:FlxText;
 	var healthTxt:FlxText;
 	var iconBF:FlxSprite;
 	var xMarks:Array<FlxSprite> = [];
@@ -387,12 +386,7 @@ class EducatorStage
 		mathTxt.cameras = [camBoard != null ? camBoard : camFrame];
 		ps.insert(1, mathTxt);
 
-		// textos do HUD do mod (songs/Expulsion/scripts/UI.hx): placar embaixo e vida no canto
-		hudTxt = new FlxText(0, downscroll ? 70 : 900, FlxG.width, 'Accuracy:-%- (N/A) | Misses: 0 | Score: 0', 16);
-		hudTxt.setFormat(Paths.font('schoolhouse.TTF'), 30, FlxColor.WHITE, CENTER);
-		hudTxt.cameras = [camFrame];
-		ps.add(hudTxt);
-
+		// texto de vida do mod (songs/Expulsion/scripts/UI.hx). O placar e o HUD padrao da Forever (ClassHUD.scoreBar), para mostrar que e um port
 		healthTxt = new FlxText(70, downscroll ? 30 : 890, FlxG.width, 'Health: 100%', 16);
 		healthTxt.setFormat(Paths.font('schoolhouse.TTF'), 33, FlxColor.WHITE, LEFT);
 		healthTxt.cameras = [camFrame];
@@ -473,7 +467,6 @@ class EducatorStage
 		h.healthBarBG.visible = false;
 		h.iconP1.visible = false;
 		h.iconP2.visible = false;
-		h.scoreBar.visible = false;
 		// strums so aparecem no beat 28
 		for (sl in PlayState.strumLines)
 			for (r in sl.receptors)
@@ -646,9 +639,6 @@ class EducatorStage
 
 		iconBF.animation.play(PlayState.health < 0.5 ? 'defeat' : 'idle');
 		healthTxt.text = 'Health: ' + Math.floor(PlayState.health * 50) + '%';
-		if (PlayState.misses > 0 || PlayState.songScore > 0)
-			hudTxt.text = 'Accuracy: ' + Std.string(Math.floor(Timings.getAccuracy() * 100) / 100) + '% - ' + Timings.returnScoreRating().toUpperCase()
-				+ ' |  Misses: ' + PlayState.misses + ' | Score: ' + PlayState.songScore;
 
 		if (mathTime)
 			updateMathInput();

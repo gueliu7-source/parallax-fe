@@ -31,8 +31,8 @@ Edite `assets/data/parallax.json` (Bloco de Notas, dentro da pasta do jogo): `"q
 ## Atualizar o repositorio no GitHub (Codespace)
 1. Suba este zip para o Codespace (arraste para a lista de arquivos).
 2. No terminal: `git pull`, depois
-   `unzip -q -o parallax-forever-fase7.zip && cp -r parallax-forever/. . && rm -rf parallax-forever parallax-forever-fase7.zip`
-3. `git add -A && git commit -m "fase 7" && git push` (o build roda sozinho na aba Actions).
+   `unzip -q -o parallax-forever-fase8.zip && cp -r parallax-forever/. . && rm -rf parallax-forever parallax-forever-fase8.zip`
+3. `git add -A && git commit -m "fase 8" && git push` (o build roda sozinho na aba Actions).
 
 
 Se voce ja tinha subido a fase anterior, apague os atlases antigos do menu antes do push:
@@ -56,3 +56,8 @@ Veja `docs/EVENTOS-PARALLAX.md` (todos os eventos do chart, os efeitos por beat 
 - A moldura volta a ocupar 0..960 (o original centralizava com altura 720); o quadro-negro tambem.
 - Strums no alto (y=50), alinhadas com as notas; textos "Health" e "Accuracy | Misses | Score" do mod com a fonte schoolhouse.
 - Titulo: itens do menu e logo nao aparecem mais na tela errada.
+
+## HUD e julgamentos (fase 8)
+- Placar: HUD padrao da Forever (ClassHUD.scoreBar), para mostrar que e um port, mas com a fonte do mod (schoolhouse). O texto "Health" tambem usa a fonte do mod.
+- Sick/Good/Bad/Shit e o combo aparecem no canto superior direito (area preta acima do semaforo).
+- Strums centradas sob as notas (offset -67.5, -42.5): antes ficavam ~42 unidades a esquerda e as notas pareciam tortas.

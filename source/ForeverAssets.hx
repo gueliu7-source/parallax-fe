@@ -188,10 +188,10 @@ class ForeverAssets
 				newStaticArrow.updateHitbox();
 				newStaticArrow.antialiasing = false;
 
-				// PARALLAX: as notas do mod ficam em receptor.x + 25 (PlayState), entao a strum e desenhada ali, sem o offset do pixel vanilla
+				// PARALLAX: a nota pixel (102 px) fica em receptor.x + 25 e a strum precisa ficar centrada sob ela: x = -67.5 (como no vanilla) e y = -42.5
 				var eduNotes:Bool = (PlayState.curStage == 'educator' && gameObjects.educator.EduShaders.modNotes());
-				var offX:Int = eduNotes ? -25 : -67;
-				var offY:Int = eduNotes ? 0 : -50;
+				var offX:Float = eduNotes ? -67.5 : -67;
+				var offY:Float = eduNotes ? -42.5 : -50;
 				newStaticArrow.addOffset('static', offX, offY);
 				newStaticArrow.addOffset('pressed', offX, offY);
 				newStaticArrow.addOffset('confirm', offX, offY);

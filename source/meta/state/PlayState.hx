@@ -1121,8 +1121,6 @@ class PlayState extends MusicBeatState
 
 	function popUpCombo(?preload:Bool = false)
 	{
-		if (curStage == 'educator')
-			return; // PARALLAX: sem popups de combo (o script original remove o comboGroup)
 		var comboString:String = Std.string(combo);
 		var negative = false;
 		if ((comboString.startsWith('-')) || (combo == 0))
@@ -1175,6 +1173,15 @@ class PlayState extends MusicBeatState
 				numScore.y += 50;
 			}
 				numScore.x += 100;
+			// PARALLAX: combo fixo logo abaixo do julgamento, no canto superior direito
+			if (curStage == 'educator')
+			{
+				numScore.cameras = [camHUD];
+				numScore.velocity.set(0, 0);
+				numScore.acceleration.set(0, 0);
+				numScore.x = 1050 - (stringArray.length * 43) / 2 + 43 * scoreInt;
+				numScore.y = 120;
+			}
 		}
 	}
 
@@ -1224,8 +1231,6 @@ class PlayState extends MusicBeatState
 
 	public function displayRating(daRating:String, timing:String, ?cache:Bool = false)
 	{
-		if (curStage == 'educator')
-			return; // PARALLAX: sem popups de julgamento
 		/* so you might be asking
 			"oh but if the rating isn't sick why not just reset it"
 			because miss judgements can pop, and they dont mess with your sick combo
@@ -1269,6 +1274,16 @@ class PlayState extends MusicBeatState
 			// bound to camera
 			rating.cameras = [camHUD];
 			rating.screenCenter();
+		}
+
+		// PARALLAX: julgamentos fixos no canto superior direito (area preta acima do semaforo da moldura)
+		if (curStage == 'educator')
+		{
+			rating.cameras = [camHUD];
+			rating.velocity.set(0, 0);
+			rating.acceleration.set(0, 0);
+			rating.x = 1050 - rating.width / 2;
+			rating.y = 70 - rating.height / 2;
 		}
 
 		// return the actual rating to the array of judgements
