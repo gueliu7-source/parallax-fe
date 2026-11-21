@@ -70,7 +70,8 @@ class Main extends Sprite
 
 	public static var gameVersion:String = '0.2.4.2';
 
-	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
+	/** zoom padrao das cameras (0.75 numa janela 960x720 com jogo 1280x960): o PlayState precisa multiplicar os zooms por ele **/
+	public static var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var infoCounter:InfoHud; // initialize the heads up display that shows information before creating it.
 

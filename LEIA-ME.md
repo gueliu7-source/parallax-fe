@@ -31,8 +31,8 @@ Edite `assets/data/parallax.json` (Bloco de Notas, dentro da pasta do jogo): `"q
 ## Atualizar o repositorio no GitHub (Codespace)
 1. Suba este zip para o Codespace (arraste para a lista de arquivos).
 2. No terminal: `git pull`, depois
-   `unzip -q -o parallax-forever-fase6.zip && cp -r parallax-forever/. . && rm -rf parallax-forever parallax-forever-fase6.zip`
-3. `git add -A && git commit -m "fase 6" && git push` (o build roda sozinho na aba Actions).
+   `unzip -q -o parallax-forever-fase7.zip && cp -r parallax-forever/. . && rm -rf parallax-forever parallax-forever-fase7.zip`
+3. `git add -A && git commit -m "fase 7" && git push` (o build roda sozinho na aba Actions).
 
 
 Se voce ja tinha subido a fase anterior, apague os atlases antigos do menu antes do push:
@@ -52,6 +52,7 @@ Veja `docs/EVENTOS-PARALLAX.md` (todos os eventos do chart, os efeitos por beat 
 
 ## Atualizacao da fase 6 (correcoes comparadas com o mod original)
 - Pasta de UI renomeada: `assets/images/ui/educator` -> `assets/images/uiEducator` (no Windows `ui` e `UI` sao a mesma pasta e o jogo nao achava a moldura, o quadro-negro e os icones). No repositorio, rode `git mv assets/images/ui/educator assets/images/uiEducator` ANTES de copiar este zip.
-- A camera do jogo agora ocupa so a janela da moldura (escala 0.75, medida nos videos do original).
+- Causa raiz de varias coisas: o Main.hx cria o jogo com zoom 0.75 (janela 960x720) mas o PlayState levava as cameras de HUD/strums a zoom 1, deixando notas e HUD 33% maiores e as strums fora do topo da tela. Agora todos os zooms sao multiplicados por Main.zoom.
+- A moldura volta a ocupar 0..960 (o original centralizava com altura 720); o quadro-negro tambem.
 - Strums no alto (y=50), alinhadas com as notas; textos "Health" e "Accuracy | Misses | Score" do mod com a fonte schoolhouse.
 - Titulo: itens do menu e logo nao aparecem mais na tela errada.

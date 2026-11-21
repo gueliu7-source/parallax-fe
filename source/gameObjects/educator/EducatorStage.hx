@@ -38,13 +38,8 @@ class EducatorStage
 	public static var DAD_Y:Float = 230;
 	public static var BF_X:Float = 770;
 	public static var BF_Y:Float = 400;
-	/** escala da camera do jogo dentro da janela da moldura (medida comparando com o mod original) **/
-	public static inline var ZF:Float = 0.75;
-	// janela transparente da moldura do HUD, em unidades de jogo 1280x960 (640x480 do atlas x2, y + 120)
-	static inline var WIN_X:Int = 238;
-	static inline var WIN_Y:Int = 318;
-	static inline var WIN_W:Int = 804;
-	static inline var WIN_H:Int = 562;
+	/** zoom padrao das cameras (Main.zoom, 0.75): o zoom "do script" e multiplicado por ele **/
+	public static var ZF:Float = 0.75; // = Main.zoom (definido no construtor)
 	static var CAM_X:Float = 270;
 	static var CAM_Y:Float = 325;
 
@@ -139,6 +134,7 @@ class EducatorStage
 	public function new(ps:PlayState)
 	{
 		this.ps = ps;
+		ZF = Main.zoom;
 		downscroll = Init.trueSettings.get('Downscroll');
 		loadConfig();
 
@@ -213,13 +209,10 @@ class EducatorStage
 
 	function buildCameras()
 	{
-		// no original o jogo aparece SO dentro da janela da moldura: a camera do jogo ocupa so essa janela (e renderiza menos pixels)
-		PlayState.camGame.x = WIN_X;
-		PlayState.camGame.y = WIN_Y;
-		PlayState.camGame.width = WIN_W;
-		PlayState.camGame.height = WIN_H;
-		camDoor = new FlxCamera(WIN_X, WIN_Y + 40, WIN_W, WIN_H);
+		// a moldura opaca cobre as bordas; a janela transparente dela fica no centro da tela (= centro da camera)
+		camDoor = new FlxCamera(0, 0, FlxG.width, FlxG.height);
 		camDoor.zoom = 0.5 * ZF;
+		camDoor.y += 40;
 		camDoor.bgColor = 0x00000000;
 		FlxG.cameras.add(camDoor);
 		// camDoor desenha logo acima da camGame e abaixo do HUD (a ordem de exibicao e a dos flashSprite, nao a de FlxG.cameras.list)
@@ -346,7 +339,7 @@ class EducatorStage
 		hud.screenCenter();
 		hud.setGraphicSize(1280, 960);
 		hud.cameras = [camFrame];
-		hud.y += 120;
+		// (o original fazia hud.y += 120 depois de screenCenter() com altura 720; com altura 960 o quadro ja fica em 0..960)
 		ps.insert(0, hud);
 
 		for (i in 0...3)
@@ -366,8 +359,13 @@ class EducatorStage
 		blackboard.animation.addByPrefix('normal', 'normal', 1, false);
 		blackboard.animation.addByPrefix('evil', 'evil', 1, false);
 		blackboard.animation.play('normal');
-		blackboard.screenCenter();
-		blackboard.y += downscroll ? 730 : -500;
+		// o original centralizava com FlxG.height = 720
+		blackboard.x = (FlxG.width - blackboard.width) / 2;
+		blackboard.y = (720 - blackboard.height) / 2;
+		if (downscroll)
+			blackboard.y += 730;
+		else
+			blackboard.y -= 500;
 		blackboard.cameras = [camBoard != null ? camBoard : camFrame];
 		blackboard.scale.set(2, 2);
 		ps.insert(0, blackboard);
